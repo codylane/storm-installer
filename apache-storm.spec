@@ -63,8 +63,8 @@ echo "     - \"localhost\"" >> %{buildroot}%{pkg_root_dir}/conf/storm.yaml
 echo "" >> %{buildroot}%{pkg_root_dir}/conf/storm.yaml
 echo "storm.local.dir: \"%{pkg_root_dir}\"" >> %{buildroot}%{pkg_root_dir}/conf/storm.yaml
 
-#update logback config
-sed -i -e 's/${logfile\.name}/${storm.id:-storm}-${logfile.name}/g' %{buildroot}%{pkg_root_dir}/logback/cluster.xml
+#update logging config
+sed -i -e 's/${logfile\.name}/${storm.id:-storm}-${logfile.name}/g' %{buildroot}%{pkg_root_dir}/log4j2/cluster.xml
 
 # Form a list of files for the files directive
 echo $(cd %{buildroot} && find . -type f | cut -c 2-) | tr ' ' '\n' > files.txt
