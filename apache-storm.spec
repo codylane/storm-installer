@@ -51,12 +51,9 @@ exit 0
 %{__mkdir_p} %{buildroot}%{_initddir}/
 %{__mkdir_p} %{buildroot}%{_localstatedir}/run/storm
 
-%{__cp} init.d/* %{buildroot}%{_initddir}/
-%{__chmod} +x  %{buildroot}%{_initddir}/*
 %{__cp} %{_currentdir}/sysconfig/storm %{buildroot}%{_sysconfdir}/sysconfig/storm
-%{__cp} %{_currentdir}/init.d/storm-nimbus %{buildroot}/etc/init.d/
-%{__cp} %{_currentdir}/init.d/storm-supervisor %{buildroot}/etc/init.d/
-%{__cp} %{_currentdir}/init.d/storm-ui %{buildroot}/etc/init.d/
+%{__cp} %{_currentdir}/init.d/* %{buildroot}%{_initddir}/
+%{__chmod} +x  %{buildroot}%{_initddir}/*
 
 #update default config
 echo "nimbus.host: \"localhost\"" >> %{buildroot}%{pkg_root_dir}/conf/storm.yaml
