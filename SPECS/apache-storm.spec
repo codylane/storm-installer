@@ -1,17 +1,23 @@
-Name: apache-storm	
-Version: 0.9.4
-Release: 1%{?dist}
-Summary: Storm Complex Event Processing	
+%define pkg_root_dir /opt/storm
+%define pkg_version  1.0.2
+%define pkg_name     apache-storm
+%define pkg_release  1
+%define pkg_name_ver %{pkg_name}-%{pkg_version}
+
+Name: %{pkg_name}
+Version: %{pkg_version}
+Release: %{pkg_release}%{?dist}
+Summary: Storm Complex Event Processing
 Group: Applications/Internet
 License: Apache License Version 2.0
 URL: https://storm.apache.org/
-Source: http://www.apache.org/dyn/closer.cgi/storm/apache-storm-0.9.4/apache-storm-0.9.4.tar.gz
+Source: http://www.apache.org/dyn/closer.cgi/storm/%{pkg_name_ver}/%{pkg_name_ver}.tar.gz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 Requires(pre): shadow-utils
 %description
-Storm is a distributed realtime computation system. 
-Similar to how Hadoop provides a set of general primitives for doing batch processing, 
-Storm provides a set of general primitives for doing realtime computation. Storm is simple, 
+Storm is a distributed realtime computation system.
+Similar to how Hadoop provides a set of general primitives for doing batch processing,
+Storm provides a set of general primitives for doing realtime computation. Storm is simple,
 can be used with any programming language, is used by many companies, and is a lot of fun to use!
 
 The Rationale page on the wiki explains what Storm is and why it was built.
@@ -22,7 +28,7 @@ Storm has a website at storm-project.net.
 %pre
 getent group storm >/dev/null || groupadd -r storm
 getent passwd storm >/dev/null || \
-    useradd -r -g storm -d /opt/storm -s /sbin/nologin \
+    useradd -r -g storm -d %{pkg_root_dir} -s /sbin/nologin \
     -c "Storm Service" storm
 exit 0
 
@@ -34,21 +40,30 @@ exit 0
 
 %install
 # Copy the storm file to the right places
-%{__mkdir_p} %{buildroot}/opt/storm-%{version}
-%{__mkdir_p} %{buildroot}/var/opt/storm
-%{__cp} -R * %{buildroot}/opt/storm-%{version}/
-%{__ln_s} /opt/storm-%{version} %{buildroot}/opt/storm
+%{__mkdir_p} %{buildroot}%{pkg_name_ver}
+%{__mkdir_p} %{buildroot}/var%{pkg_root_dir}
+%{__cp} -R * %{buildroot}%{pkg_name_ver}/
+%{__ln_s} %{pkg_name_ver} %{buildroot}%{pkg_root_dir}
+
+# Copy the storm file to the right places
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/sysconfig
+%{__mkdir_p} %{buildroot}%{_initddir}/
+%{__mkdir_p} %{buildroot}%{_localstatedir}/run/storm
+
+%{__cp} init.d/* %{buildroot}%{_initddir}/
+%{__chmod} +x  %{buildroot}%{_initddir}/*
+%{__cp} sysconfig/storm %{buildroot}%{_sysconfdir}/sysconfig/storm
 
 #update default config
-echo "nimbus.host: \"localhost\"" >> %{buildroot}/opt/storm-%{version}/conf/storm.yaml
-echo "" >> %{buildroot}/opt/storm-%{version}/conf/storm.yaml
-echo "storm.zookeeper.servers:" >> %{buildroot}/opt/storm-%{version}/conf/storm.yaml
-echo "     - \"localhost\"" >> %{buildroot}/opt/storm-%{version}/conf/storm.yaml
-echo "" >> %{buildroot}/opt/storm-%{version}/conf/storm.yaml
-echo "storm.local.dir: \"/opt/storm\"" >> %{buildroot}/opt/storm-%{version}/conf/storm.yaml
+echo "nimbus.host: \"localhost\"" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
+echo "" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
+echo "storm.zookeeper.servers:" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
+echo "     - \"localhost\"" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
+echo "" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
+echo "storm.local.dir: \"%{pkg_root_dir}\"" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
 
 #update logback config
-sed -i -e 's/${logfile\.name}/${storm.id:-storm}-${logfile.name}/g' %{buildroot}/opt/storm-%{version}/logback/cluster.xml
+sed -i -e 's/${logfile\.name}/${storm.id:-storm}-${logfile.name}/g' %{buildroot}%{pkg_name_ver}/logback/cluster.xml
 
 # Form a list of files for the files directive
 echo $(cd %{buildroot} && find . -type f | cut -c 2-) | tr ' ' '\n' > files.txt
@@ -56,20 +71,44 @@ echo $(cd %{buildroot} && find . -type f | cut -c 2-) | tr ' ' '\n' > files.txt
 echo $(cd %{buildroot} && find . -type l | cut -c 2-) | tr ' ' '\n' >> files.txt
 
 %clean
-%{__rm} -rf %{buildroot}/opt/storm-%{version}
-%{__rm} %{buildroot}/opt/storm
+[ "%{buildroot}" != "/" ] && %{__rm} -rf %{buildroot}
+%{__rm} -rf %{buildroot}%{pkg_name_ver}
+%{__rm} %{buildroot}%{pkg_root_dir}
 
 %files -f files.txt
-
+%defattr(-,root,root,-)
+%{_sysconfdir}/sysconfig/storm
+%{_initddir}/storm-drpc
+%{_initddir}/storm-logviewer
+%{_initddir}/storm-nimbus
+%{_initddir}/storm-supervisor
+%{_initddir}/storm-ui
+%defattr(-,storm,storm,-)
+/var/run/storm
 %defattr(644,storm,storm,755)
 
 %post
-chown -R storm:storm /opt/storm-%{version}
-chmod -R 755 /opt/storm/bin/*
+chown -R storm:storm %{pkg_name_ver}
+chmod -R 755 %{pkg_root_dir}/bin/*
+exit 0
+
+%preun
+if [ "$1" = "0" ]; then
+    /sbin/service storm-ui stop
+    /sbin/service storm-nimbus stop
+    /sbin/service storm-supervisor stop
+    /sbin/service storm-drpc stop
+    /sbin/service storm-logviewer stop
+    /sbin/chkconfig storm-ui off
+    /sbin/chkconfig storm-nimbus off
+    /sbin/chkconfig storm-supervisor off
+    /sbin/chkconfig storm-drpc off
+    /sbin/chkconfig storm-logviewer off
+fi
 exit 0
 
 %postun
-rm -rf /opt/storm-%{version}
+rm -rf %{pkg_name_ver}
 exit 0
 
 %changelog
