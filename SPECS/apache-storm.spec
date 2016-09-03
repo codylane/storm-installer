@@ -2,7 +2,7 @@
 %define pkg_version  1.0.2
 %define pkg_release  1
 %define pkg_name_ver %{pkg_name}-%{pkg_version}
-%define pkg_root_dir /opt/storm
+%define pkg_root_dir /opt/%{pkg_name}
 
 Name: %{pkg_name}
 Version: %{pkg_version}
