@@ -3,6 +3,7 @@
 %define pkg_release  1
 %define pkg_name_ver %{pkg_name}-%{pkg_version}
 %define pkg_root_dir /opt/%{pkg_name}
+%define _currentdir  %(pwd)
 
 Name: %{pkg_name}
 Version: %{pkg_version}
@@ -45,14 +46,17 @@ exit 0
 %{__cp} -R * %{buildroot}%{pkg_root_dir}/
 # %{__ln_s} %{pkg_name_ver} %{buildroot}%{pkg_root_dir}
 
-# Copy the storm file to the right places
+# Copy the storm init files to the right places
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/sysconfig
 %{__mkdir_p} %{buildroot}%{_initddir}/
 %{__mkdir_p} %{buildroot}%{_localstatedir}/run/storm
 
 %{__cp} init.d/* %{buildroot}%{_initddir}/
 %{__chmod} +x  %{buildroot}%{_initddir}/*
-%{__cp} sysconfig/storm %{buildroot}%{_sysconfdir}/sysconfig/storm
+%{__cp} %{_currentdir}/sysconfig/storm %{buildroot}%{_sysconfdir}/sysconfig/storm
+%{__cp} %{_currentdir}/init.d/storm-nimbus %{buildroot}/etc/init.d/
+%{__cp} %{_currentdir}/init.d/storm-supervisor %{buildroot}/etc/init.d/
+%{__cp} %{_currentdir}/init.d/storm-ui %{buildroot}/etc/init.d/
 
 #update default config
 echo "nimbus.host: \"localhost\"" >> %{buildroot}%{pkg_root_dir}/conf/storm.yaml
