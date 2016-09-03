@@ -1,8 +1,8 @@
-%define pkg_root_dir /opt/storm
-%define pkg_version  1.0.2
 %define pkg_name     apache-storm
+%define pkg_version  1.0.2
 %define pkg_release  1
 %define pkg_name_ver %{pkg_name}-%{pkg_version}
+%define pkg_root_dir /opt/storm
 
 Name: %{pkg_name}
 Version: %{pkg_version}
@@ -40,10 +40,10 @@ exit 0
 
 %install
 # Copy the storm file to the right places
-%{__mkdir_p} %{buildroot}%{pkg_name_ver}
+%{__mkdir_p} %{buildroot}%{pkg_root_dir}
 %{__mkdir_p} %{buildroot}/var%{pkg_root_dir}
-%{__cp} -R * %{buildroot}%{pkg_name_ver}/
-%{__ln_s} %{pkg_name_ver} %{buildroot}%{pkg_root_dir}
+%{__cp} -R * %{buildroot}%{pkg_root_dir}/
+# %{__ln_s} %{pkg_name_ver} %{buildroot}%{pkg_root_dir}
 
 # Copy the storm file to the right places
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/sysconfig
@@ -55,15 +55,15 @@ exit 0
 %{__cp} sysconfig/storm %{buildroot}%{_sysconfdir}/sysconfig/storm
 
 #update default config
-echo "nimbus.host: \"localhost\"" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
-echo "" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
-echo "storm.zookeeper.servers:" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
-echo "     - \"localhost\"" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
-echo "" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
-echo "storm.local.dir: \"%{pkg_root_dir}\"" >> %{buildroot}%{pkg_name_ver}/conf/storm.yaml
+echo "nimbus.host: \"localhost\"" >> %{buildroot}%{pkg_root_dir}/conf/storm.yaml
+echo "" >> %{buildroot}%{pkg_root_dir}/conf/storm.yaml
+echo "storm.zookeeper.servers:" >> %{buildroot}%{pkg_root_dir}/conf/storm.yaml
+echo "     - \"localhost\"" >> %{buildroot}%{pkg_root_dir}/conf/storm.yaml
+echo "" >> %{buildroot}%{pkg_root_dir}/conf/storm.yaml
+echo "storm.local.dir: \"%{pkg_root_dir}\"" >> %{buildroot}%{pkg_root_dir}/conf/storm.yaml
 
 #update logback config
-sed -i -e 's/${logfile\.name}/${storm.id:-storm}-${logfile.name}/g' %{buildroot}%{pkg_name_ver}/logback/cluster.xml
+sed -i -e 's/${logfile\.name}/${storm.id:-storm}-${logfile.name}/g' %{buildroot}%{pkg_root_dir}/logback/cluster.xml
 
 # Form a list of files for the files directive
 echo $(cd %{buildroot} && find . -type f | cut -c 2-) | tr ' ' '\n' > files.txt
@@ -72,7 +72,7 @@ echo $(cd %{buildroot} && find . -type l | cut -c 2-) | tr ' ' '\n' >> files.txt
 
 %clean
 [ "%{buildroot}" != "/" ] && %{__rm} -rf %{buildroot}
-%{__rm} -rf %{buildroot}%{pkg_name_ver}
+%{__rm} -rf %{buildroot}%{pkg_root_dir}
 %{__rm} %{buildroot}%{pkg_root_dir}
 
 %files -f files.txt
@@ -88,7 +88,7 @@ echo $(cd %{buildroot} && find . -type l | cut -c 2-) | tr ' ' '\n' >> files.txt
 %defattr(644,storm,storm,755)
 
 %post
-chown -R storm:storm %{pkg_name_ver}
+chown -R storm:storm %{pkg_root_dir}
 chmod -R 755 %{pkg_root_dir}/bin/*
 exit 0
 
@@ -108,7 +108,7 @@ fi
 exit 0
 
 %postun
-rm -rf %{pkg_name_ver}
+rm -rf %{pkg_root_dir}
 exit 0
 
 %changelog
