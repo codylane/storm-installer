@@ -15,31 +15,31 @@ This package is a package group for ease of setting up a storm cluster.
 Before you install Storm Package on a cluster,
 there are some important steps you need to do to prepare your system.
 
-1.Storm needs zookeeper cluster.  
-  For zookeeper cluster installation, you find install step on cdh.  
-  http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/installation_installation.html  
-  http://archive-primary.cloudera.com/cdh5/redhat/6/x86_64/cdh/5.3.2/RPMS/x86_64/  
+1.Storm needs zookeeper cluster.
+  For zookeeper cluster installation, you find install step on cdh.
+  http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/installation_installation.html
+  http://archive-primary.cloudera.com/cdh5/redhat/6/x86_64/cdh/5.3.2/RPMS/x86_64/
 
-  or below url(in Japanese)  
-  http://d.hatena.ne.jp/acro-engineer/20111123/1322059295  
+  or below url(in Japanese)
+  http://d.hatena.ne.jp/acro-engineer/20111123/1322059295
 
 
 ## Installing storm package
 
-1.Unzip downloaded zip archive.  
-  https://github.com/acromusashi/storm-installer/wiki/Download  
+1.Unzip downloaded zip archive.
+  https://github.com/acromusashi/storm-installer/wiki/Download
 
 2.Install the Storm RPM:
 ```
 # su -
-# rpm -ivh apache-storm-0.9.4-1.el6.x86_64.rpm  
-# rpm -ivh apache-storm-service-0.9.4-1.el6.x86_64.rpm  
+# rpm -ivh apache-storm-1.0.2-1.el6.x86_64.rpm
+# rpm -ivh apache-storm-service-1.0.2-1.el6.x86_64.rpm
 ```
 
-3.Set the zookeeper host and nimbus host to below property.  
-  (Reference: http://nathanmarz.github.com/storm/doc/backtype/storm/Config.html )  
-* storm.zookeeper.servers (STORM_ZOOKEEPER_SERVERS)  
-* nimbus.host             (NIMBUS_HOST)  
+3.Set the zookeeper host and nimbus host to below property.
+  (Reference: http://nathanmarz.github.com/storm/doc/backtype/storm/Config.html )
+* storm.zookeeper.servers (STORM_ZOOKEEPER_SERVERS)
+* nimbus.host             (NIMBUS_HOST)
 
 ```
 # vi /opt/storm/conf/storm.yaml
@@ -58,30 +58,30 @@ nimbus.host: "192.168.100.101"  ## nimbus host
 
 Start
 ```
-# service storm-nimbus start  
-# service storm-ui start  
-# service storm-drpc start  
-# service storm-logviewer start  
-# service storm-supervisor start  
+# service storm-nimbus start
+# service storm-ui start
+# service storm-drpc start
+# service storm-logviewer start
+# service storm-supervisor start
 ```
 
 Stop
 ```
-# service storm-supervisor stop  
-# service storm-logviewer stop  
-# service storm-drpc stop  
-# service storm-ui stop  
-# service storm-nimbus stop  
+# service storm-supervisor stop
+# service storm-logviewer stop
+# service storm-drpc stop
+# service storm-ui stop
+# service storm-nimbus stop
 ```
 
 
 ## Caution
-In case this installer uses, worker's log name becomes below format.  
+In case this installer uses, worker's log name becomes below format.
 ```
 [TopologyID]-worker-[port].log
 ```
 
-So, Storm-UI Component summary screen's port link is distabled.   
+So, Storm-UI Component summary screen's port link is disabled.
 If you want to use port link, execute below command and modify log setting.
 ```
 # vi /opt/storm/logback/cluster.xml
@@ -114,10 +114,10 @@ modify after:
 
 ## Dependency libraries
 
-Project    : Aache-Storm  
-Version    : 0.9.4  
-Lisence    : Apache License Version 2.0  
-Source URL : https://storm.apache.org/  
+Project    : Aache-Storm
+Version    : 1.0.2
+Lisence    : Apache License Version 2.0
+Source URL : https://storm.apache.org/
 
 
 ## License
