@@ -77,7 +77,7 @@ find %{buildroot} -name '*.py?' -type f | xargs rm -f
 %defattr(-,root,root)
 %attr(0755,root,root) /etc/rc.d/init.d/storm-*
 %attr(0644,root,root) %config(noreplace) /etc/sysconfig/storm
-/var/run/storm
+%attr(0755, storm, storm) /var/run/storm
 %defattr(-,storm,storm)
 %{pkg_root_dir}/CHANGELOG.md
 %{pkg_root_dir}/LICENSE
