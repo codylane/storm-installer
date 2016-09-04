@@ -1,6 +1,6 @@
 # This file contains default configurations for storm startup
 JVM_TYPE="server"
-JAVA_LIBRARY_PATH="/usr/local/lib:/opt/local/lib:/usr/lib:/usr/lib64"
+JAVA_LIBRARY_PATH="/usr/local/lib:/opt/local/lib:/opt/apache-storm/lib:/usr/lib:/usr/lib64"
 
 STORM_HOME="/opt/apache-storm"
 STORM_LOG_DIR="$STORM_HOME/logs"
