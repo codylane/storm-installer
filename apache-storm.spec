@@ -15,6 +15,7 @@ URL: https://storm.apache.org/
 Source: http://www.apache.org/dyn/closer.cgi/storm/%{pkg_name_ver}/%{pkg_name_ver}.tar.gz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 Requires(pre): shadow-utils
+Requires: java == 1.7.0
 %description
 Storm is a distributed realtime computation system.
 Similar to how Hadoop provides a set of general primitives for doing batch processing,
@@ -84,7 +85,7 @@ find %{buildroot} -name '*.py?' -type f | xargs rm -f
 %{pkg_root_dir}/README.markdown
 %{pkg_root_dir}/RELEASE
 %{pkg_root_dir}/SECURITY.md
-%attr(0755,storm,strom) %{pkg_root_dir}/bin/*
+%{pkg_root_dir}/bin
 %{pkg_root_dir}/conf
 %{pkg_root_dir}/examples
 %{pkg_root_dir}/external
@@ -114,7 +115,7 @@ fi
 exit 0
 
 %postun
-rm -rf %{pkg_root_dir}
+rmdir %{pkg_root_dir}
 exit 0
 
 %changelog
