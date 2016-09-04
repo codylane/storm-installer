@@ -115,7 +115,9 @@ fi
 exit 0
 
 %postun
-rmdir %{pkg_root_dir}
+if [ `dirname %{pkg_root_dir})` != '/' ]; then
+  rm -rf %{pkg_root_dir}
+fi
 exit 0
 
 %changelog
