@@ -42,7 +42,7 @@ there are some important steps you need to do to prepare your system.
 * nimbus.host             (NIMBUS_HOST)
 
 ```
-# vi /opt/storm/conf/storm.yaml
+# vi /opt/apache-storm/conf/storm.yaml
 ```
 
 Setting Example:
@@ -84,7 +84,7 @@ In case this installer uses, worker's log name becomes below format.
 So, Storm-UI Component summary screen's port link is disabled.
 If you want to use port link, execute below command and modify log setting.
 ```
-# vi /opt/storm/logback/cluster.xml
+# vi /opt/apache-storm/logback/cluster.xml
 ```
 
 storm-installer initial:
