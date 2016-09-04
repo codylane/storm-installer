@@ -15,7 +15,7 @@ URL: https://storm.apache.org/
 Source: http://www.apache.org/dyn/closer.cgi/storm/%{pkg_name_ver}/%{pkg_name_ver}.tar.gz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 Requires(pre): shadow-utils
-Requires: java == 1.7.0
+Requires(pre): java == 1:1.7.0
 %description
 Storm is a distributed realtime computation system.
 Similar to how Hadoop provides a set of general primitives for doing batch processing,
