@@ -71,4 +71,3 @@ def test_opt_apache_storm_bin_scripts_exists(File, name):
     assert f.mode == 0755
     assert f.user == 'storm'
     assert f.group == 'storm'
-

@@ -38,3 +38,15 @@ def test_var_run_storm_does_not_exist(File):
 def test_var_log_apache_storm_does_not_exist(File):
     f = File('/var/log/apache-storm')
     assert f.exists == False
+
+@pytest.mark.parametrize('name', [
+    'storm-nimbus',
+    'storm-drpc',
+    'storm-logviewer',
+    'storm-supervisor',
+    'storm-ui',
+])
+def test_service_is_stopped(Service, name):
+    svc = Service(name)
+    assert svc.is_running == False
+    assert svc.is_enabled == False

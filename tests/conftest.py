@@ -31,3 +31,7 @@ def package():
 def File():
     f = backend.get_module('File')
     return f
+
+@pytest.fixture()
+def Service():
+    return backend.get_module('Service')
