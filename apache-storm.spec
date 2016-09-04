@@ -44,6 +44,9 @@ exit 0
 # Copy the storm file to the right places
 %{__mkdir_p} %{buildroot}%{pkg_root_dir}
 %{__mkdir_p} %{buildroot}/var%{pkg_root_dir}
+%{__mkdir_p} %{buildroot}/var/log
+%{__mkdir_p} %{buildroot}/%{pkg_root_dir}/logs
+%{__ln_s} %{pkg_root_dir}/logs %{buildroot}/var/log/%{pkg_name}
 %{__cp} -R * %{buildroot}%{pkg_root_dir}/
 
 # Copy the storm init files to the right places
@@ -78,6 +81,7 @@ find %{buildroot} -name '*.py?' -type f | xargs rm -f
 %attr(0755,root,root) /etc/rc.d/init.d/storm-*
 %attr(0644,root,root) %config(noreplace) /etc/sysconfig/storm
 %attr(0755, storm, storm) /var/run/storm
+/var/log/%{pkg_name}
 %defattr(-,storm,storm)
 %{pkg_root_dir}/CHANGELOG.md
 %{pkg_root_dir}/LICENSE
@@ -97,6 +101,7 @@ find %{buildroot} -name '*.py?' -type f | xargs rm -f
 %post
 chown -R storm:storm %{pkg_root_dir}
 chmod -R 755 %{pkg_root_dir}/bin/*
+ln -sf %{pkg_root_dir}/logs /var/log/%{pkg_name}
 exit 0
 
 %preun
