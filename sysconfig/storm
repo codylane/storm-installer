@@ -19,7 +19,7 @@ NIMBUS_CLASS_NAME='org.apache.storm.daemon.nimbus'
 # Worker configuration options
 SUPERVISOR_JVM_MEMORY="1024m"
 # Additional nimbus JVM options
-SUPERVISOR_JVM_OPTS="-Dlogback.configurationFile=${STORM_HOME}/logback/cluster.xml"
+SUPERVISOR_JVM_OPTS="-Dlogfile.name=supervisor.log -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector -Dlog4j.configurationFile=${STORM_HOME}/log4j2/cluster.xml"
 
 SUPERVISOR_CLASS_NAME='org.apache.storm.daemon.supervisor'
 
