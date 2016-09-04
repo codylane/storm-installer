@@ -95,13 +95,13 @@ find %{buildroot} -name '*.py?' -type f | xargs rm -f
 %{pkg_root_dir}/external
 %{pkg_root_dir}/lib
 %{pkg_root_dir}/log4j2
+%{pkg_root_dir}/logs
 %{pkg_root_dir}/public
 
 
 %post
 chown -R storm:storm %{pkg_root_dir}
 chmod -R 755 %{pkg_root_dir}/bin/*
-ln -sf %{pkg_root_dir}/logs /var/log/%{pkg_name}
 exit 0
 
 %preun
@@ -120,7 +120,7 @@ fi
 exit 0
 
 %postun
-if [ `dirname %{pkg_root_dir})` != '/' ]; then
+if [ `dirname %{pkg_root_dir}` != '/' ]; then
   rm -rf %{pkg_root_dir}
 fi
 exit 0
