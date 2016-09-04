@@ -66,27 +66,34 @@ echo "storm.local.dir: \"%{pkg_root_dir}\"" >> %{buildroot}%{pkg_root_dir}/conf/
 #update logging config
 sed -i -e 's/${logfile\.name}/${storm.id:-storm}-${logfile.name}/g' %{buildroot}%{pkg_root_dir}/log4j2/cluster.xml
 
-# Form a list of files for the files directive
-echo $(cd %{buildroot} && find . -type f | cut -c 2-) | tr ' ' '\n' > files.txt
-# Grab the symlinks too
-echo $(cd %{buildroot} && find . -type l | cut -c 2-) | tr ' ' '\n' >> files.txt
+# remove pesky pyc or pyo from rpm
+find %{buildroot} -name '*.py?' -type f | xargs rm -f
 
 %clean
-[ "%{buildroot}" != "/" ] && %{__rm} -rf %{buildroot}
-%{__rm} -rf %{buildroot}%{pkg_root_dir}
-%{__rm} %{buildroot}%{pkg_root_dir}
+# [ "%{buildroot}" != "/" ] && %{__rm} -rf %{buildroot}
+# %{__rm} -rf %{buildroot}%{pkg_root_dir}
+echo 'NOOP'
 
-%files -f files.txt
-%defattr(-,root,root,-)
-%{_sysconfdir}/sysconfig/storm
-%{_initddir}/storm-drpc
-%{_initddir}/storm-logviewer
-%{_initddir}/storm-nimbus
-%{_initddir}/storm-supervisor
-%{_initddir}/storm-ui
-%defattr(-,storm,storm,-)
+%files
+%defattr(-,root,root)
+%attr(0755,root,root) /etc/rc.d/init.d/storm-*
+%attr(0644,root,root) %config(noreplace) /etc/sysconfig/storm
 /var/run/storm
-%defattr(644,storm,storm,755)
+%defattr(-,storm,storm)
+%{pkg_root_dir}/CHANGELOG.md
+%{pkg_root_dir}/LICENSE
+%{pkg_root_dir}/NOTICE
+%{pkg_root_dir}/README.markdown
+%{pkg_root_dir}/RELEASE
+%{pkg_root_dir}/SECURITY.md
+%attr(0755,storm,strom) %{pkg_root_dir}/bin/*
+%{pkg_root_dir}/conf
+%{pkg_root_dir}/examples
+%{pkg_root_dir}/external
+%{pkg_root_dir}/lib
+%{pkg_root_dir}/log4j2
+%{pkg_root_dir}/public
+
 
 %post
 chown -R storm:storm %{pkg_root_dir}
