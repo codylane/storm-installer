@@ -1,0 +1,7 @@
+## pythong
+__pycache__
+*.pyc
+
+## pytest
+pytestdebug.log
+.cache
