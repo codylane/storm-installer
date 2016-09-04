@@ -4,14 +4,14 @@ import testinfra
 @pytest.mark.parametrize('name', [
     ('~/rpmbuild/RPMS/x86_64/apache-storm-1.0.2-1.el6.x86_64.rpm'),
 ])
-def test_install_rpm(run_local_command, package, name):
+def test_install_rpm(Command, Package, name):
     '''
     It should install the apache-storm RPM without errors
     '''
     # ~/rpmbuild/RPMS/x86_64/apache-storm-1.0.2-1.el6.x86_64.rpm
-    yum_install = run_local_command('yum install -y {0}'.format(name))
+    yum_install = Command('yum install -y {0}'.format(name))
 
-    pkg = package('apache-storm')
+    pkg = Package('apache-storm')
     assert pkg.is_installed
 
 def test_opt_apache_storm_exists(File):

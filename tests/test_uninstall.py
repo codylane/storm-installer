@@ -1,14 +1,14 @@
 import pytest
 import testinfra
 
-def test_uninstall_rpm(run_local_command, package):
-  cmd = run_local_command('yum remove -y apache-storm')
+def test_uninstall_rpm(Command):
+  cmd = Command('yum remove -y apache-storm')
 
 @pytest.mark.parametrize('name', [
   'apache-storm',
 ])
-def test_packages_should_not_be_installed(package, name):
-    p = package(name)
+def test_packages_should_not_be_installed(Package, name):
+    p = Package(name)
     assert p.is_installed == False
 
 def test_opt_apache_storm_does_not_exist(File):
