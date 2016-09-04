@@ -44,7 +44,6 @@ exit 0
 %{__mkdir_p} %{buildroot}%{pkg_root_dir}
 %{__mkdir_p} %{buildroot}/var%{pkg_root_dir}
 %{__cp} -R * %{buildroot}%{pkg_root_dir}/
-# %{__ln_s} %{pkg_name_ver} %{buildroot}%{pkg_root_dir}
 
 # Copy the storm init files to the right places
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/sysconfig
@@ -70,9 +69,8 @@ sed -i -e 's/${logfile\.name}/${storm.id:-storm}-${logfile.name}/g' %{buildroot}
 find %{buildroot} -name '*.py?' -type f | xargs rm -f
 
 %clean
-# [ "%{buildroot}" != "/" ] && %{__rm} -rf %{buildroot}
-# %{__rm} -rf %{buildroot}%{pkg_root_dir}
-echo 'NOOP'
+[ "%{buildroot}" != "/" ] && %{__rm} -rf %{buildroot}
+%{__rm} -rf %{buildroot}%{pkg_root_dir}
 
 %files
 %defattr(-,root,root)
@@ -120,6 +118,9 @@ rm -rf %{pkg_root_dir}
 exit 0
 
 %changelog
+* Sat Sep 03 2016 Cody Lane
+- Apache-Storm 1.0.2 Packaging
+
 * Tue Nov 30 2014 Acroquest Technology
 - Apache-Storm 0.9.3 Packaging
 
