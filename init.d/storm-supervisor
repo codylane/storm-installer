@@ -16,7 +16,7 @@ PID_FILE="/var/run/storm/storm-supervisor.pid"
 # Source config
 . /etc/sysconfig/storm
 
-CLASSPATH="$STORM_LIB/*:$STORM_HOME:$STORM_CONF"
+CLASSPATH=${STORM_LIB}/*:${STORM_HOME}:${STORM_CONF}
 
 start() {
     if storm_status>/dev/null; then
@@ -25,7 +25,7 @@ start() {
     else
     	echo "Starting storm supervisor..."
     fi
-    STORM_CMD="java -$JVM_TYPE -Xmx$SUPERVISOR_JVM_MEMORY -Duser.dir=\"$STORM_HOME\" -Djava.library.path=\"$JAVA_LIBRARY_PATH\" -Dstorm.options=\"$STORM_OPTIONS\" -Dstorm.home=\"$STORM_HOME\" -Dstorm.log.dir=\"$STORM_LOG_DIR\" -Dlogfile.name=supervisor.log $SUPERVISOR_JVM_OPTS -cp \"$CLASSPATH\" org.apache.storm.daemon.supervisor &"
+    STORM_CMD="java -$JVM_TYPE -Ddaemon.name=supervisor -Xmx$SUPERVISOR_JVM_MEMORY -Duser.dir=\"$STORM_HOME\" -Djava.library.path=\"$JAVA_LIBRARY_PATH\" -Dstorm.options=\"$STORM_OPTIONS\" -Dstorm.home=\"$STORM_HOME\" -Dstorm.log.dir=\"$STORM_LOG_DIR\" -Dlogfile.name=supervisor.log $SUPERVISOR_JVM_OPTS -cp \"$CLASSPATH\" $SUPERVISOR_CLASS_NAME &"
     runuser --shell=/bin/bash --preserve-environment $STORM_USER --command="$STORM_CMD > /dev/null && echo \$! > $PID_FILE"
     RETVAL=$?
     storm_status
