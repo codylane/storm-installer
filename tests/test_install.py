@@ -2,7 +2,7 @@ import pytest
 import testinfra
 
 @pytest.mark.parametrize('name', [
-    ('~/rpmbuild/RPMS/x86_64/apache-storm-1.0.2-1.el6.x86_64.rpm'),
+    ('apache-storm-1.0.2-1.el6.x86_64.rpm'),
 ])
 def test_install_rpm(Command, Package, name):
     '''
