@@ -54,9 +54,9 @@ exit 0
 # Copy the storm init files to the right places
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/sysconfig
 %{__mkdir_p} %{buildroot}%{_initddir}/
-%{__mkdir_p} %{buildroot}%{_localstatedir}/run/storm
+%{__mkdir_p} %{buildroot}%{_localstatedir}/run/%{pkg_name}
 
-%{__cp} %{_currentdir}/sysconfig/storm %{buildroot}%{_sysconfdir}/sysconfig/storm
+%{__cp} %{_currentdir}/sysconfig/%{pkg_name} %{buildroot}%{_sysconfdir}/sysconfig/%{pkg_name}
 %{__cp} %{_currentdir}/init.d/* %{buildroot}%{_initddir}/
 %{__chmod} +x  %{buildroot}%{_initddir}/*
 
@@ -81,9 +81,9 @@ find %{buildroot} -name '*.py?' -type f | xargs rm -f
 %files
 %defattr(-,root,root)
 %attr(0755,root,root) /etc/rc.d/init.d/storm-*
-%attr(0644,root,root) %config(noreplace) /etc/sysconfig/storm
+%attr(0644,root,root) %config(noreplace) /etc/sysconfig/%{pkg_name}
 %attr(0755,root,root) /etc/%{pkg_name}
-%attr(0755, storm, storm) /var/run/storm
+%attr(0755, storm, storm) /var/run/%{pkg_name}
 /var/log/%{pkg_name}
 %defattr(-,storm,storm)
 %{pkg_root_dir}/CHANGELOG.md
