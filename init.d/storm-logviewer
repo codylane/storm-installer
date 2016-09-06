@@ -11,10 +11,10 @@
 RETVAL=0
 
 STORM_USER=storm
-PID_FILE="/var/run/storm/storm-logviewer.pid"
+PID_FILE="/var/run/apache-storm/storm-logviewer.pid"
 
 # Source config
-. /etc/sysconfig/storm
+. /etc/sysconfig/apache-storm
 
 CLASSPATH=${STORM_LIB}/*:${STORM_HOME}:${STORM_CONF}
 
