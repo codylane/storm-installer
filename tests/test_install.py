@@ -22,13 +22,18 @@ def test_opt_apache_storm_exists(File):
     assert f.group == 'storm'
     assert f.mode == 0755
 
-def test_etc_sysconfig_strom_exists(File):
-    f = File('/etc/sysconfig/storm')
+def test_etc_sysconfig_storm_exists(File):
+    f = File('/etc/sysconfig/apache-storm')
     assert f.is_file
     assert f.exists
     assert f.user == 'root'
     assert f.group == 'root'
     assert f.mode  == 0644
+
+def test_etc_apache_storm_exists(File):
+    f = File('/etc/apache-storm')
+    assert f.is_symlink
+    assert f.linked_to == '/opt/apache-storm/conf'
 
 @pytest.mark.parametrize('name', [
     'storm-nimbus',
