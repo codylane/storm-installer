@@ -56,7 +56,7 @@ exit 0
 %{__mkdir_p} %{buildroot}%{_initddir}/
 %{__mkdir_p} %{buildroot}%{_localstatedir}/run/%{pkg_name}
 
-%{__cp} %{_currentdir}/sysconfig/%{pkg_name} %{buildroot}%{_sysconfdir}/sysconfig/%{pkg_name}
+%{__cp} %{_currentdir}/sysconfig/storm %{buildroot}%{_sysconfdir}/sysconfig/%{pkg_name}
 %{__cp} %{_currentdir}/init.d/* %{buildroot}%{_initddir}/
 %{__chmod} +x  %{buildroot}%{_initddir}/*
 

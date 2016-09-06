@@ -55,8 +55,8 @@ def test_var_log_apache_storm_exists(File):
     assert f.is_symlink
     assert f.linked_to == '/opt/apache-storm/logs'
 
-def test_var_run_storm_exists(File):
-    f = File('/var/run/storm')
+def test_var_run_apache_storm_exists(File):
+    f = File('/var/run/apache-storm')
     assert f.is_directory
     assert f.user == 'storm'
     assert f.group == 'storm'
