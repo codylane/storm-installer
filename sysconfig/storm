@@ -1,0 +1,47 @@
+# This file contains default configurations for storm startup
+JVM_TYPE="server"
+JAVA_LIBRARY_PATH="/usr/local/lib:/opt/local/lib:/opt/apache-storm/lib:/usr/lib:/usr/lib64"
+
+STORM_HOME="/opt/apache-storm"
+STORM_LOG_DIR="$STORM_HOME/logs"
+STORM_LIB="$STORM_HOME/lib"
+STORM_CONF="$STORM_HOME/conf"
+
+STORM_OPTIONS=""
+
+# Nimbus configuration options
+NIMBUS_JVM_MEMORY="768m"
+# Additional nimbus JVM options
+NIMBUS_JVM_OPTS="-DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector -Dlog4j.configurationFile=${STORM_HOME}/log4j2/cluster.xml"
+
+NIMBUS_CLASS_NAME='org.apache.storm.daemon.nimbus'
+
+# Worker configuration options
+SUPERVISOR_JVM_MEMORY="1024m"
+# Additional nimbus JVM options
+SUPERVISOR_JVM_OPTS="-Dlogfile.name=supervisor.log -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector -Dlog4j.configurationFile=${STORM_HOME}/log4j2/cluster.xml"
+
+SUPERVISOR_CLASS_NAME='org.apache.storm.daemon.supervisor'
+
+# UI configuration options
+UI_JVM_MEMORY="768m"
+# Additional nimbus JVM options
+UI_JVM_OPTS="-Dlogfile.name=ui.log -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector -Dlog4j.configurationFile=${STORM_HOME}/log4j2/cluster.xml"
+
+UI_CLASS_NAME='org.apache.storm.ui.core'
+
+# DRPC configuration options
+DRPC_JVM_MEMORY="768m"
+# Additional nimbus JVM options
+DRPC_JVM_OPTS="-Dlogfile.name=drpc.log -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector -Dlog4j.configurationFile=${STORM_HOME}/log4j2/cluster.xml"
+
+DRPC_CLASS_NAME='org.apache.storm.daemon.drpc'
+
+# LogViewer configuration options
+LOGVIEWER_JVM_MEMORY="256m"
+# Additional LogViewer JVM options
+LOGVIEWER_JVM_OPTS="-Dlogfile.name=logviewer.log -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector -Dlog4j.configurationFile=${STORM_HOME}/log4j2/cluster.xml"
+
+LOGVIEWER_CLASS_NAME='org.apache.storm.daemon.logviewer'
+
+

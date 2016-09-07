@@ -42,7 +42,7 @@ cdhのZooKeeperパッケージを用いるか、下記のページを参照く�
 * nimbus.host             (NIMBUS_HOST)  
 
 ```
-# vi /opt/storm/conf/storm.yaml
+# vi /opt/apache-storm/conf/storm.yaml
 ```
 
 設定例:
@@ -84,7 +84,7 @@ Stop
 そのため、Storm-UI 「Component summary」画面のPortリンクは使用できません。  
 使用したい場合は下記のコマンドを実行し、log出力定義を修正してください。  
 ```
-# vi /opt/storm/logback/cluster.xml
+# vi /opt/apache-storm/logback/cluster.xml
 ```
 
 修正前:
