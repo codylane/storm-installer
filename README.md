@@ -2,13 +2,47 @@
 
 This package is a package group for ease of setting up a storm cluster.
 
-
 ## Environment
 
 * OS: CentOS 6.X
 * CPU Arch: x64
 * Middleware: Needs JDK6 or after（Oracle JDK or Open JDK）
 
+## Building the apache-storm RPM
+
+Before you build the apache-storm RPM you will need to make sure that you have Docker installed and you have the docker client installed on your workstation.  Please consult `https://www.docker.com/products/overview` to install docker.
+
+Once you have docker installed and your workstation can communicate with your docker host then all you need to do is the following in the directory where you cloned this repo.
+
+### Builing the apache-storm RPM.
+```
+cd docker
+./build.sh
+```
+
+or you can also pass a specific build version to `./build.sh 1.0.1` which would build `apache-storm-1.0.1*.rpm`
+
+
+The above will fire up centos 6 docker container and build the apache-storm RPM.  Note that after the RPM is built this repo will also make sure that the RPM can pass a few integration tests.  If all goes well, you will have a valid apache-storm RPM that you can downloa which will be discussed in the next step.
+
+### Retrieving the apache-storm RPM
+
+This assumes you completed the previous step [Builing the apache-storm RPM]
+
+First confirm that you have a container named `storm-rpmbuild`
+```
+docker images storm-rpmbuild
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+storm-rpmbuild      latest              11e0d66946dc        2 days ago          2.393 GB
+```
+
+If you get this instead, then the build stage must have failed.  You can use `docker logs <container_id>` to see what went wrong.  You can also run `./build.sh` again to see what went wrong.
+```
+docker images storm-rpmbuild
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+```
+
+If you have the `storm-rpmbuild` container image in your inventory then you can run `./run.sh` and you'll be presented with a url that you can copy into your browser to download the RPM.  Also this script will also create a `apache-storm.repo` in your current directory that you can use as a yum repo.
 
 ## Before you install storm package
 
@@ -26,14 +60,12 @@ there are some important steps you need to do to prepare your system.
 
 ## Installing storm package
 
-1.Unzip downloaded zip archive.
-  https://github.com/acromusashi/storm-installer/wiki/Download
+1. Add the apache-storm RPM to your yum repo either external or internal.  Or you can download the RPM to the machine you    want to install storm on and then run `yum localinstall /path/to/apache-storm-1.0.2-1.el6.x86_64.rpm`
 
 2.Install the Storm RPM:
 ```
 # su -
 # rpm -ivh apache-storm-1.0.2-1.el6.x86_64.rpm
-# rpm -ivh apache-storm-service-1.0.2-1.el6.x86_64.rpm
 ```
 
 3.Set the zookeeper host and nimbus host to below property.
@@ -42,7 +74,7 @@ there are some important steps you need to do to prepare your system.
 * nimbus.host             (NIMBUS_HOST)
 
 ```
-# vi /opt/apache-storm/conf/storm.yaml
+vi /opt/apache-storm/conf/storm.yaml
 ```
 
 Setting Example:
